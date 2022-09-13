@@ -34,20 +34,21 @@ app.get('/api/agify/:name', async (req, res) => {
 //   res.json(response.data);
 // });
 
-app.get('/api/covid/:countries', async (req, res) => {
-  const { countries } = req.params;
-  const response = await axios.get(
-    `https://corona.lmao.ninja/v2/countries/${countries}?yesterday=true&strict=true&query
-    `
-  );
-  res.json(response.data);
-});
+// app.get('/api/covid/:countries', async (req, res) => {
+//   const { countries } = req.params;
+//   const response = await axios.get(
+//     `https://corona.lmao.ninja/v2/countries/${countries}?yesterday=true&strict=true&query
+//     `
+//   );
+//   res.json(response.data);
+// });
 
-app.get('/api/covid/historical/:countries', async (req, res) => {
-  const { countries } = req.params;
-  const response = await axios.get(
-    `https://corona.lmao.ninja/v2/historical/${countries}?lastdays=365
-      `
-  );
-  res.json(response.data);
+app.get('/api/covid/historical', async (req, res) => {
+  try {
+    const response = await axios.get(`https://api.covidtracking.com/v2/us/daily.json`);
+    return res.json(response.data);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ error: 'Error fetching data' });
+  }
 });
